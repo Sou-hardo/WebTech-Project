@@ -17,14 +17,14 @@ require "dbconnect.php";
 <body>
     <?php
     include "header.php";
-    include "footer.php";
+    // include "footer.php";
     ?>
     <main>
         <div class='simple-flexbox no-style'>
             <div>
                 <p><b>A <em>Web-Technologies </em>Project<br>For the Academic Year <em>Fall 2024-25</em></b></p><br>
-                <a class="red-button" href="sign-up_role.php">Sign up</a>
-                <a class="red-button" href="role.php">Sign in</a><br>
+                <a class="red-button" href="sign-up.php">Sign up</a>
+                <a class="red-button" href="customer-or-staff.php">Sign in</a><br>
             </div>
 
             <div>
