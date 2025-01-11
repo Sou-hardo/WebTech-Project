@@ -8,12 +8,13 @@ if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $date_of_birth = $_POST["date-of-birth"];
     $username = $_POST["username"];
-    $password = $_POST["password"];
+    $password = md5($_POST["password"]); // Hash the password using md5
     $flat = $_POST["flat"];
     $house = $_POST["house"];
     $road = $_POST["road"];
     $zip_code = $_POST["zip-code"];
     $area_id = $_POST["area"];
+    $customer_flag = $_POST["user_type"] == "Customer" ? 1 : 0;
     unset($_POST);
 
     try {
@@ -25,7 +26,7 @@ if (isset($_POST["submit"])) {
         $row = mysqli_fetch_array($result);
         $address_id = $row[0];
         $query3 = "INSERT INTO users (name, phone, email, date_of_birth, customer_flag, username, user_password, address_id) 
-                    VALUES ('$name', '$phone', '$email', '$date_of_birth', 1, '$username', '$password', $address_id)";
+                    VALUES ('$name', '$phone', '$email', '$date_of_birth', $customer_flag, '$username', '$password', $address_id)";
         $result = mysqli_query($conn, $query3);
         if ($result) {
             header("Location: sign-in.php");
@@ -92,6 +93,12 @@ if (isset($_POST["submit"])) {
                     <label>Password<br>
                         <input type="password" name="password" required minlength="6" maxlength="20"><br>
                     </label>
+                    <label>
+                        <input type="radio" name="user_type" value="Customer" required> Customer
+                    </label>
+                    <label>
+                        <input type="radio" name="user_type" value="Staff" required> Staff
+                    </label>
                     <h3>Address</h3>
                     <label>Flat<br>
                         <input type="text" name="flat" required><br>
@@ -131,7 +138,7 @@ if (isset($_POST["submit"])) {
                     <input class="red-button" type="submit" name="submit" value="Sign up"><br>
                 </form>
                 <br><br><br><br>
-                Already have an account? <a href="" class="inline-link">Sign in</a>
+                Already have an account? <a href="sign-in.php" class="inline-link">Sign in</a>
 
             </div>
         </div>
