@@ -9,7 +9,7 @@ if (isset($_SESSION["user_id"])) {
         header("Location: homepage.php");
         exit();
     } else {
-        header("Location: staff\staff-homepage.php");
+        header("Location: staff-homepage.php");
         exit();
     }
 }
@@ -23,7 +23,7 @@ if (isset($_POST["user_type"])) {
 
 if (isset($_POST["submit"])) {
     $username = $_POST["username"];
-    $password = $_POST["password"];
+    $password = md5($_POST["password"]); // Encrypt the password using md5
     try {
         $query = "SELECT * FROM users
                       WHERE username = '$username'
@@ -42,7 +42,7 @@ if (isset($_POST["submit"])) {
         if ($customer_flag == 1)
             header("Location: homepage.php");
         else
-            header("Location: staff\staff-homepage.php");
+            header("Location: staff-homepage.php");
         exit();
     }
 }
@@ -57,9 +57,6 @@ if (isset($_POST["submit"])) {
     <title>Sign in</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
-    <style>
-
-    </style>
 </head>
 
 <body>
@@ -85,7 +82,7 @@ if (isset($_POST["submit"])) {
                     </label><br>
                     <input type="submit" class="red-button" name="submit" value="Submit"><br>
                 </form>
-                <br>Don't have an account? <a class="inline-link"><br>Sign up</a>
+                <br>Don't have an account? <a href="sign-up.php" class="inline-link"><br>Sign up</a>
             </div>
         </div>
         </div>
