@@ -7,13 +7,6 @@ if (isset($_SESSION["user_id"])) {
     exit();
 }
 
-//    if (isset($_SESSION["user_id"]))
-//        $user_id = $_SESSION["user_id"];
-//    else
-//        $user_id = 1;
-//    if (empty($_GET["restaurant_id"]) and empty($_GET["food_id"])) {
-//        exit();
-//    }
 ?>
 
 <!doctype html>
