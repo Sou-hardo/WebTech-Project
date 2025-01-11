@@ -17,7 +17,7 @@ require "dbconnect.php";
 <body>
     <?php
     include "header.php";
-    // include "footer.php";
+    include "footer.php";
     ?>
     <main>
         <div class='simple-flexbox no-style'>
@@ -25,28 +25,16 @@ require "dbconnect.php";
                 <p><b>A <em>Web-Technologies </em>Project<br>For the Academic Year <em>Fall 2024-25</em></b></p><br>
                 <a class="red-button" href="sign-up.php">Sign up</a>
                 <a class="red-button" href="customer-or-staff.php">Sign in</a><br>
+                <br><a style="font-size: 10px;" href="admin.php">Admin Login</a>
             </div>
 
             <div>
                 <br><br><br><br><br>
                 <img class="half-size" src="images/delivery.png" alt="index-image">
             </div>
+
         </div>
     </main>
-
-    <footer><br><br><br><br><br>
-        <h2 style="text-align: center;">More Info</h2>
-        <div class="container">
-            <div class="row-1" style="text-align: center;">
-                <div class="item-1">
-                    <b></b>
-                </div>
-                <div class="item-1">
-                    <b></b>
-                </div>
-            </div>
-        </div>
-    </footer>
 
 </body>
 
