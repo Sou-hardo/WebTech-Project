@@ -1,6 +1,6 @@
 <?php
 global $conn;
-require "dbconnect.php";
+require_once "dbconnect.php";
 
 // Fetch existing item data if update was clicked
 $isUpdate = false;
@@ -82,15 +82,19 @@ if (isset($_POST["submit"])) {
             margin: 10px 0;
             display: none;
         }
+        input[type="text"], input[type="number"], input[type="date"], input[type="time"], input[type="file"], textarea {
+            width: 350px;
+        }
     </style>
 </head>
 
 <body>
     <?php
-    include "staff-header.php";
+    //include "staff-header.php";
     ?>
     <main>
-        <div class="basic-form">
+        <div class="container centered">
+            <div>
             <h2><?php echo $isUpdate ? 'Update Item' : 'Add New Item'; ?></h2>
             <form method="POST" enctype="multipart/form-data">
                 <?php if ($isUpdate): ?>
@@ -126,12 +130,8 @@ if (isset($_POST["submit"])) {
                         }
                         ?>
                     </select>
-                </label><br>
-                <label>Image:<br>
-                    <input type="file" name="item_image" accept="image/*" 
-                           <?php echo !$isUpdate ? 'required' : ''; ?> 
-                           onchange="previewImage(this)">
-                </label><br>
+                </label><br><br>
+                
                 <?php if ($isUpdate): ?>
                     <div>Current image:</div>
                     <?php
@@ -144,9 +144,15 @@ if (isset($_POST["submit"])) {
                     ?>
                 <?php endif; ?>
                 <img id="imagePreview" alt="Preview"><br>
+                <label>Food Image:<br>
+                    <input type="file" name="item_image" accept="image/*" 
+                           <?php echo !$isUpdate ? 'required' : ''; ?> 
+                           onchange="previewImage(this)">
+                </label><br>
                 <input type="submit" name="submit" 
                        value="<?php echo $isUpdate ? 'Update Item' : 'Add Item'; ?>">
             </form>
+            </div>
         </div>
     </main>
 
