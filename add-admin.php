@@ -13,9 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['email'];
         
         // Add a default address for the admin
-        $default_flat = 'N/A';
-        $default_house = 0;
-        $default_road = 'N/A';
+        $default_flat = '000';
+        $default_house = 000;
+        $default_road = '000';
         $default_zip_code = '0000';
         $default_area_id = 1; // Assuming 1 is a valid area_id
         $sql_address = "INSERT INTO address (flat_no, house_no, road_no, zip_code, area_id) 
@@ -31,8 +31,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: add-admin.php");
     } elseif (isset($_POST['remove_admin'])) {
         $username = $_POST['username'];
-        $sql = "UPDATE users SET admin_flag = 0 WHERE username = '$username'";
+        
+        // Get the address_id of the admin to be removed
+        $query = "SELECT address_id FROM users WHERE username = '$username'";
+        $result = mysqli_query($conn, $query);
+        $row = mysqli_fetch_assoc($result);
+        $address_id = $row['address_id'];
+        
+        // Remove the admin
+        $sql = "DELETE FROM users WHERE username = '$username'";
         mysqli_query($conn, $sql);
+        
+        // Remove the associated address
+        $sql_address = "DELETE FROM address WHERE address_id = $address_id";
+        mysqli_query($conn, $sql_address);
+        
         header("Location: add-admin.php");
     }
     header("Location: add-admin.php");
