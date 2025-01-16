@@ -15,7 +15,7 @@ if (isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign up</title>
+    <title>Staff Profile</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
 </head>
@@ -49,7 +49,7 @@ if (isset($_SESSION['user_id'])) {
                 $area_id = $row["area_id"];
 
                 ?>
-                <h2>Welcome aboard!</h2>
+                <h2>Change Profile</h2>
                 <form name="sign-up" method="post" action="">
                     <label>Name<br>
                         <input type="text" name="name" value="<?php echo $name ?>" required><br>
