@@ -24,7 +24,7 @@ if (isset($_GET["delete"])) {
 
 <body>
     <?php
-    include "header.php";
+    include "staff-header.php";
     ?>
     <main>
         <h2>All the restaurants</h2>
