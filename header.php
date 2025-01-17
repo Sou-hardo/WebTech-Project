@@ -7,12 +7,14 @@
         <ul>
             <li><a href="menu-items-all.php">ITEMS</a></li>
             <li><a href="restaurants-all.php">RESTAURANTS</a></li>
-            <li><a href="cart.php">CART</a></li>
-            <li><a href="payment.php">PAYMENT</a></li>
             
-            <li><a href="about.php">ABOUT</a></li>
-            <li><a href="orders.php">ORDERS</a></li>
+            
+            <!-- <li><a href="about.php">ABOUT</a></li> -->
+            
             <?php if (isset($_SESSION['user_id'])): ?>
+                <li><a href="cart.php">CART</a></li>
+                <li><a href="payment.php">PAYMENT</a></li>
+                <li><a href="orders.php">ORDERS</a></li>
                 <li><a href="profile.php">PROFILE</a></li>
                 <li><a href="destroy_session.php">SIGN OUT</a></li>
             <?php endif; ?>
