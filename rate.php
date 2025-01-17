@@ -5,7 +5,7 @@ require_once "dbconnect.php";
 if (isset($_SESSION["user_id"]))
     $user_id = $_SESSION["user_id"];
 else
-    $user_id = 1;
+    header("Location: sign-in.php");
 if (empty($_GET["restaurant_id"]) and empty($_GET["food_id"])) {
     exit();
 }
