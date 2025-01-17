@@ -59,26 +59,9 @@ require "dbconnect.php";
                                     SELECT T1.food_id, T1.name, T1.price, T1.r_name, T2.avg_rating
                                     FROM T1 LEFT JOIN T2
                                     ON T1.food_id = T2.food_id
-                                ),
-                                T4 AS (
-                                    SELECT DI.food_id, MAX(D.percentage) AS percentage FROM discount D
-                                    JOIN discounted_items DI
-                                    ON D.discount_id = DI.discount_id
-                                    WHERE expiry_date > NOW()
-                                    GROUP BY DI.food_id
-                                ),
-                                T5 AS (
-                                    SELECT T3.food_id, T3.name, T3.r_name,
-                                        T3.avg_rating, T3.price, T4.percentage
-                                    FROM T3 LEFT JOIN T4
-                                    ON T3.food_id = T4.food_id
                                 )
-                            SELECT food_id, name, r_name, avg_rating, price, percentage,
-                            CASE
-                                WHEN percentage IS NULL THEN price
-                                ELSE price - price * percentage / 100
-                            END AS final_price
-                            FROM T5
+                            SELECT food_id, name, r_name, avg_rating, price, price AS final_price
+                            FROM T3
                             ";
                 if (isset($_POST["submit"])) {
                     if ($_POST["search"] != "") {
@@ -122,10 +105,7 @@ require "dbconnect.php";
                                 </div>";
                     }
                     echo "<div>";
-                    if ($price != $final_price) {
-                        echo "<s>$price</s>";
-                    }
-                    echo " $final_price</div>";
+                    echo "$final_price</div>";
                     echo "<div class='float-right'>
                                 <form class='inline-div' method='get' action='item-view-rating.php'>
                                     <input type='hidden' name='food_id' value='$food_id'>
