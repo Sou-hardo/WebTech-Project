@@ -27,6 +27,13 @@ try {
     <title>Menu Items</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
+    <style>
+        .offer-image {
+            max-height: 200px;
+            max-width: 300px;
+            object-fit: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -36,26 +43,42 @@ try {
     <main>
         <h2>Offers Available Right Now</h2>
         <div class="row-1">
-            <div class="column-1">
-                <a class="image-link" href="">
-                    <img src="images/blank-image.jpg" alt="offer 1">
-                </a>
-                <a href="">
-                    Offer-1
-                </a>
-            </div>
-            <div class="column-2">
-                <a class="image-link" href="">
-                    <img src="images/blank-image.jpg" alt="offer 2">
-                </a>
-                <a class="image-link" href="">
-                    Offer-2
-                </a>
-            </div>
+            <?php
+            try {
+                $offers_query = "SELECT voucher_id AS id, title, description
+                            FROM voucher
+                            ORDER BY start_date DESC
+                            LIMIT 2";
+                $offers_result = mysqli_query($conn, $offers_query);
+                $recent_offers = mysqli_fetch_all($offers_result, MYSQLI_ASSOC);
+                
+                foreach ($recent_offers as $offer) {
+                    $id = $offer['id'];
+                    $title = $offer['title'];
+                    
+                    echo "<div class='column-1'>";
+                    echo "<a class='image-link' href='offers.php'>";
+                    
+                    // Read and display image from JSON file
+                    $jsonFile = 'uploads/offers/' . $id . '.json';
+                    if (file_exists($jsonFile)) {
+                        $jsonData = json_decode(file_get_contents($jsonFile), true);
+                        $imageData = $jsonData['image_data'];
+                        $mimeType = $jsonData['mime_type'];
+                        echo "<img class='offer-image' src='data:$mimeType;base64,$imageData' alt='$title'>";
+                    } else {
+                        echo "<img class='offer-image' src='images/blank-image.jpg' alt='offer'>";
+                    }
+                    echo "</a>";
+                    echo "<a href='offers.php'>$title</a>";
+                    echo "</div>";
+                }
+            } catch (mysqli_sql_exception $ex) {
+                exit("Error: " . $ex->getMessage());
+            }
+            ?>
         </div>
-        <a href="offers.php">See all offers</a>
-        <h2>Best Sellers</h2>
-        <h2>Here's everything we got</h2>
+        <h2>Recently Ordered Items</h2>
         <div class="restaurant-view-h2">
             <form action="" method="post">
                 <label>Search Item
@@ -105,26 +128,10 @@ try {
                                     SELECT T1.food_id, T1.name, T1.price, T1.r_name, T2.avg_rating
                                     FROM T1 LEFT JOIN T2
                                     ON T1.food_id = T2.food_id
-                                ),
-                                T4 AS (
-                                    SELECT DI.food_id, MAX(D.percentage) AS percentage FROM discount D
-                                    JOIN discounted_items DI
-                                    ON D.discount_id = DI.discount_id
-                                    WHERE expiry_date > NOW()
-                                    GROUP BY DI.food_id
-                                ),
-                                T5 AS (
-                                    SELECT T3.food_id, T3.name, T3.r_name, T3.avg_rating, T3.price, T4.percentage
-                                    FROM T3 LEFT JOIN T4
-                                    ON T3.food_id = T4.food_id
                                 )
-                            SELECT food_id, name, r_name, avg_rating, price, percentage,
-                            CASE
-                                WHEN percentage IS NULL THEN price
-                                ELSE price - price * percentage / 100
-                            END AS final_price
-                            FROM T5
-                            ";
+                            SELECT food_id, name, r_name, avg_rating, price, 
+                                   price AS final_price
+                            FROM T3";
                 if (isset($_POST["submit"])) {
                     if ($_POST["search"] != "") {
                         $query1 .= " WHERE name LIKE '%" . $_POST["search"] . "%'";
@@ -156,10 +163,7 @@ try {
                                 </div>";
                     }
                     echo "<div>";
-                    if ($price != $final_price) {
-                        echo "<s>$price</s>";
-                    }
-                    echo " $final_price</div>";
+                    echo "$price</div>";
                     echo "<div class='float-right'>
                                 <form class='inline-div' method='get' action='item-view-rating.php'>
                                     <input type='hidden' name='food_id' value='$food_id'>
