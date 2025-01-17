@@ -5,7 +5,7 @@ require_once "dbconnect.php";
 if (isset($_SESSION["user_id"]))
     $user_id = $_SESSION["user_id"];
 else
-    $user_id = 1;
+    header("Location: sign-in.php");
 if (empty($_GET["food_id"])) {
     exit();
 }
@@ -152,7 +152,7 @@ if (isset($_GET["submit"]) and $_GET["submit"] == "Rate") {
         exit("Error: " . $ex->getMessage());
     }
     ?>
-    
+
     <div class="vertical-container">
         <?php
         try {
