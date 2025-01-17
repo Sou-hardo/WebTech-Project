@@ -63,7 +63,17 @@ if (isset($_POST["submit"])) {
             width: 100px;
             float: right;
         }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            display: none;
+        }
     </style>
+
+    
 </head>
 
 <body>
@@ -74,21 +84,24 @@ if (isset($_POST["submit"])) {
         <div class="container centered">
             <div>
                 <h2>Welcome aboard!</h2>
-                <form name="sign-up" method="post" action="">
+                <form name="sign-up" method="post" action="" onsubmit="return validateForm()">
                     <label>Name<br>
                         <input type="text" name="name" required><br>
                     </label>
                     <label>Phone<br>
-                        <input type="text" name="phone" required><br>
+                        <input type="text" name="phone" required onblur="checkDuplicate('phone')"><br>
+                        <span id="phone-error" class="error-message"></span>
                     </label>
                     <label>Email<br>
-                        <input type="email" name="email" required><br>
+                        <input type="email" name="email" required onblur="checkDuplicate('email')"><br>
+                        <span id="email-error" class="error-message"></span>
                     </label>
                     <label>Date of Birth<br>
                         <input type="date" name="date-of-birth" required><br>
                     </label>
                     <label>Username<br>
-                        <input type="text" name="username" required maxlength="20"><br>
+                        <input type="text" name="username" required maxlength="20" onblur="checkDuplicate('username')"><br>
+                        <span id="username-error" class="error-message"></span>
                     </label>
                     <label>Password<br>
                         <input type="password" name="password" required minlength="6" maxlength="20"><br>
@@ -143,6 +156,9 @@ if (isset($_POST["submit"])) {
             </div>
         </div>
     </main>
+    
+    <script src="js/sign-up-validations.js"></script>
+
 </body>
 
 </html>
