@@ -17,10 +17,10 @@ try {
     exit("Error: " . $ex->getMessage());
 }
 ?>
-
+ 
 <!doctype html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,13 +29,12 @@ try {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
     <style>
         .offer-image {
+            max-width: 100px;
             max-height: 200px;
-            max-width: 300px;
-            object-fit: cover;
         }
     </style>
 </head>
-
+ 
 <body>
     <?php
     include "header.php";
@@ -51,14 +50,14 @@ try {
                             LIMIT 2";
                 $offers_result = mysqli_query($conn, $offers_query);
                 $recent_offers = mysqli_fetch_all($offers_result, MYSQLI_ASSOC);
-                
+               
                 foreach ($recent_offers as $offer) {
                     $id = $offer['id'];
                     $title = $offer['title'];
-                    
+                   
                     echo "<div class='column-1'>";
                     echo "<a class='image-link' href='offers.php'>";
-                    
+                   
                     // Read and display image from JSON file
                     $jsonFile = 'uploads/offers/' . $id . '.json';
                     if (file_exists($jsonFile)) {
@@ -104,7 +103,7 @@ try {
                 $query1 =
                     "WITH
                                 X AS (
-                                    SELECT food_id, COUNT(*) AS total_ordered 
+                                    SELECT food_id, COUNT(*) AS total_ordered
                                     FROM ordered_items
                                     GROUP BY food_id
                                     ORDER BY total_ordered DESC
@@ -129,7 +128,7 @@ try {
                                     FROM T1 LEFT JOIN T2
                                     ON T1.food_id = T2.food_id
                                 )
-                            SELECT food_id, name, r_name, avg_rating, price, 
+                            SELECT food_id, name, r_name, avg_rating, price,
                                    price AS final_price
                             FROM T3";
                 if (isset($_POST["submit"])) {
@@ -147,9 +146,18 @@ try {
                     $avg_rating = $row["avg_rating"];
                     $price = $row["price"];
                     $final_price = $row["final_price"];
-
+ 
                     echo "<div class='container-item'>";
-                    echo "<img src='images/donut.png' alt='food'>";
+                    // Read and display menu item image from JSON file
+                    $jsonFile = 'uploads/menu/' . $food_id . '.json';
+                    if (file_exists($jsonFile)) {
+                        $jsonData = json_decode(file_get_contents($jsonFile), true);
+                        $imageData = $jsonData['image_data'];
+                        $mimeType = $jsonData['mime_type'];
+                        echo "<img src='data:$mimeType;base64,$imageData' alt='$name'>";
+                    } else {
+                        echo "<img src='images/donut.png' alt='food'>";
+                    }
                     echo "<div>$name</div>";
                     if (is_null($avg_rating)) {
                         echo "<div class='row'>
@@ -174,7 +182,7 @@ try {
                                     <input type='submit' name='add-item' value='add to cart' class='red-button'>
                                 </form>
                             </div>";
-
+ 
                     //                            foreach (array_keys($row) as $key) {
                     //                                echo $key." : ".$row[$key]."<br>";
                     //                            }
@@ -185,8 +193,7 @@ try {
             }
             ?>
         </div>
-        <a href="menu-items-all.php">See all items</a>
     </main>
 </body>
-
+ 
 </html>
