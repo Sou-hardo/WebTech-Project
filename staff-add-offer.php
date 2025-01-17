@@ -5,15 +5,10 @@ require_once "dbconnect.php";
 // Fetch existing offer data if update was clicked
 $isUpdate = false;
 $existingData = null;
-if (isset($_GET["update"])) {
+if (isset($_GET["update"]) && isset($_GET["voucher_id"])) {
     $isUpdate = true;
-    if (isset($_GET["voucher_id"])) {
-        $voucher_id = $_GET["voucher_id"];
-        $query = "SELECT *, voucher_id as id FROM voucher WHERE voucher_id = $voucher_id";
-    } elseif (isset($_GET["discount_id"])) {
-        $discount_id = $_GET["discount_id"];
-        $query = "SELECT *, discount_id as id FROM discount WHERE discount_id = $discount_id";
-    }
+    $voucher_id = $_GET["voucher_id"];
+    $query = "SELECT * FROM voucher WHERE voucher_id = $voucher_id";
     $result = mysqli_query($conn, $query);
     $existingData = mysqli_fetch_assoc($result);
 }
@@ -24,25 +19,17 @@ if (isset($_POST["submit"])) {
     $percentage = $_POST["percentage"];
     $start_date = $_POST["start_date"];
     $expiry_date = $_POST["expiry_date"];
+    $promo_code = $_POST["promo_code"];
 
     try {
         if (isset($_POST["voucher_id"])) { // Update existing voucher
             $voucher_id = $_POST["voucher_id"];
-            $promo_code = $_POST["promo_code"];
             $query = "UPDATE voucher SET 
                      title='$title', description='$description', 
                      promo_code='$promo_code', percentage=$percentage,
                      start_date='$start_date', expiry_date='$expiry_date'
                      WHERE voucher_id=$voucher_id";
-        } elseif (isset($_POST["discount_id"])) { // Update existing discount
-            $discount_id = $_POST["discount_id"];
-            $query = "UPDATE discount SET 
-                     title='$title', description='$description',
-                     percentage=$percentage, start_date='$start_date',
-                     expiry_date='$expiry_date'
-                     WHERE discount_id=$discount_id";
         } else { // Insert new voucher
-            $promo_code = $_POST["promo_code"];
             $query = "INSERT INTO voucher (title, description, promo_code, percentage, start_date, expiry_date) 
                       VALUES ('$title', '$description', '$promo_code', $percentage, '$start_date', '$expiry_date')";
         }
@@ -53,7 +40,7 @@ if (isset($_POST["submit"])) {
             // Handle image upload
             if (isset($_FILES['offer_image']) && $_FILES['offer_image']['size'] > 0) {
                 $file = $_FILES['offer_image'];
-                $id = isset($_POST["voucher_id"]) ? $_POST["voucher_id"] : (isset($_POST["discount_id"]) ? $_POST["discount_id"] : mysqli_insert_id($conn));
+                $id = isset($_POST["voucher_id"]) ? $_POST["voucher_id"] : mysqli_insert_id($conn);
                 $fileName = $id . '.json';
                 $uploadPath = 'uploads/offers/';
 
@@ -85,9 +72,7 @@ if (isset($_POST["submit"])) {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offers</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
@@ -110,14 +95,10 @@ if (isset($_POST["submit"])) {
     <main>
         <div class="container centered">
             <div>
-                <h2><?php echo $isUpdate ? 'Update Offer' : 'Add New Offer'; ?></h2>
+                <h2><?php echo $isUpdate ? 'Update Voucher' : 'Add New Voucher'; ?></h2>
                 <form method="POST" enctype="multipart/form-data">
                     <?php if ($isUpdate): ?>
-                        <?php if (isset($_GET["voucher_id"])): ?>
-                            <input type="hidden" name="voucher_id" value="<?php echo $existingData['id']; ?>">
-                        <?php else: ?>
-                            <input type="hidden" name="discount_id" value="<?php echo $existingData['id']; ?>">
-                        <?php endif; ?>
+                        <input type="hidden" name="voucher_id" value="<?php echo $existingData['voucher_id']; ?>">
                     <?php endif; ?>
 
                     <label>Title:<br>
@@ -126,15 +107,13 @@ if (isset($_POST["submit"])) {
                     </label><br>
                     <label>Description:<br>
                         <textarea name="description" maxlength="255" rows="4"><?php
-                                                                                echo $isUpdate ? $existingData['description'] : '';
-                                                                                ?></textarea>
+                            echo $isUpdate ? $existingData['description'] : '';
+                        ?></textarea>
                     </label><br>
-                    <?php if (!isset($_GET["discount_id"])): ?>
-                        <label>Promo Code:<br>
-                            <input type="text" name="promo_code" required maxlength="20"
-                                value="<?php echo $isUpdate ? $existingData['promo_code'] : ''; ?>">
-                        </label><br>
-                    <?php endif; ?>
+                    <label>Promo Code:<br>
+                        <input type="text" name="promo_code" required maxlength="20"
+                            value="<?php echo $isUpdate ? $existingData['promo_code'] : ''; ?>">
+                    </label><br>
                     <label>Discount Percentage:<br>
                         <input type="number" name="percentage" required min="0" max="100" step="0.01"
                             value="<?php echo $isUpdate ? $existingData['percentage'] : ''; ?>">
@@ -151,7 +130,7 @@ if (isset($_POST["submit"])) {
                     <?php if ($isUpdate): ?>
                         <div>Current image:</div>
                         <?php
-                        $jsonFile = 'uploads/offers/' . $existingData['id'] . '.json';
+                        $jsonFile = 'uploads/offers/' . $existingData['voucher_id'] . '.json';
                         if (file_exists($jsonFile)) {
                             $jsonData = json_decode(file_get_contents($jsonFile), true);
                             echo "<img src='data:{$jsonData['mime_type']};base64,{$jsonData['image_data']}' 
@@ -172,20 +151,14 @@ if (isset($_POST["submit"])) {
             </div>
             <?php
             try {
-                $query =
-                    "SELECT voucher_id AS id, title, description, promo_code, percentage,
-                                start_date, expiry_date
-                            FROM voucher
-                            UNION
-                            (SELECT discount_id AS id, title, description, NULL AS promo_code, percentage,
-                                start_date, expiry_date
-                            FROM discount)
-                            ORDER BY start_date DESC
-                            ";
+                $query = "SELECT voucher_id, title, description, promo_code, percentage,
+                            start_date, expiry_date
+                         FROM voucher
+                         ORDER BY start_date DESC";
                 $result = mysqli_query($conn, $query);
                 $offers = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 foreach ($offers as $row) {
-                    $id = $row["id"];
+                    $id = $row["voucher_id"];
                     $title = $row["title"];
                     $description = $row["description"];
                     $promo_code = $row["promo_code"];
