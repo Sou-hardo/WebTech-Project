@@ -75,6 +75,14 @@ if (isset($_GET["update"])) {
     <title>Cart</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
+    <style>
+        .cart-item-image {
+            max-width: 150px;
+            max-height: 100px;
+            width: auto;
+            height: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -100,37 +108,17 @@ if (isset($_GET["update"])) {
                 <div class="vertical-container">
                     <?php
                     $query1 =
-                        "WITH
-                            T1 AS (
-                                SELECT M.food_id, M.name, M.price, R.name AS r_name, C.quantity
-                                FROM menu_item M, restaurant R, cart C
-                                WHERE user_id = $user_id
-                                    AND M.restaurant_id = R.restaurant_id
-                                    AND C.food_id = M.food_id
-                            ),
-                            T2 AS (
-                                SELECT DI.food_id, MAX(D.percentage) AS percentage FROM discount D
-                                JOIN discounted_items DI
-                                ON D.discount_id = DI.discount_id
-                                WHERE expiry_date > NOW()
-                                GROUP BY DI.food_id
-                            ),
-                            T3 AS (
-                                SELECT T1.food_id, T1.name, T1.r_name,
-                                    T1.price, T1.quantity, T2.percentage
-                                FROM T1 LEFT JOIN T2
-                                ON T1.food_id = T2.food_id
-                            ),
-                            T4 AS (
-                            SELECT food_id, name, r_name, quantity,
-                            CASE
-                                WHEN percentage IS NULL THEN price
-                                ELSE ROUND(price - price * percentage / 100, 2)
-                            END AS price
-                            FROM T3
-                            )
-                        SELECT * FROM T4
-                        ";
+                        "WITH T1 AS (
+                            SELECT M.food_id, M.name, M.price, R.name AS r_name, C.quantity
+                            FROM menu_item M, restaurant R, cart C
+                            WHERE user_id = $user_id
+                                AND M.restaurant_id = R.restaurant_id
+                                AND C.food_id = M.food_id
+                        )
+                        SELECT food_id, name, r_name, quantity, price,
+                               price AS final_price
+                        FROM T1";
+
                     $result = mysqli_query($conn, $query1);
                     $items = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     $total_price = 0;
@@ -143,16 +131,15 @@ if (isset($_GET["update"])) {
                         $total_price += $price * $quantity;
 
                         echo "<div class='vertical-container-item'>";
-                        
-                        // Read and display image from JSON file
+                        // Read and display menu item image from JSON file
                         $jsonFile = 'uploads/menu/' . $food_id . '.json';
                         if (file_exists($jsonFile)) {
                             $jsonData = json_decode(file_get_contents($jsonFile), true);
                             $imageData = $jsonData['image_data'];
                             $mimeType = $jsonData['mime_type'];
-                            echo "<img src='data:$mimeType;base64,$imageData' alt='$name'>";
+                            echo "<img class='cart-item-image' src='data:$mimeType;base64,$imageData' alt='$name'>";
                         } else {
-                            echo "<img src='images/donut.png' alt='food'>";
+                            echo "<img class='cart-item-image' src='images/donut.png' alt='food'>";
                         }
 
                         echo "<div class='vertical-container-inner-1'>
@@ -182,11 +169,10 @@ if (isset($_GET["update"])) {
                                 </form>
                             </div>                            
                         </div>";
-                        //                        echo $name, $r_name, $quantity, $price, "<br>";
                     }
                     ?>
                 </div>
-                <div class="container" style="width: 35%; flex-wrap: wrap">
+                <div class="container" style="width: 35%; flex-wrap: wrap; color:white;">
                     <form action="cart.php">
                         <?php
                         if (isset($_GET["voucher"]) and $_GET["voucher"] == "Remove") {
@@ -216,7 +202,7 @@ if (isset($_GET["update"])) {
                                 <input type='text' name='promo_code' placeholder='PROMO CODE' value='$promo_code'>
                             </label>";
                         } else {
-                            echo "<label style='color: white;'>Enter voucher
+                            echo "<label>Enter voucher
                                 <input type='text' name='promo_code' placeholder='PROMO CODE'>
                             </label>";
                         }
