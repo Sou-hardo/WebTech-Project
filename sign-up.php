@@ -65,7 +65,7 @@ if (isset($_POST["submit"])) {
         }
 
         .error-message {
-            color: red;
+            color: yellow;
             font-size: 12px;
             margin-top: 5px;
             margin-bottom: 5px;
