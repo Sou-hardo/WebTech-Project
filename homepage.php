@@ -17,10 +17,10 @@ try {
     exit("Error: " . $ex->getMessage());
 }
 ?>
- 
+
 <!doctype html>
 <html lang="en">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,7 +34,7 @@ try {
         }
     </style>
 </head>
- 
+
 <body>
     <?php
     include "header.php";
@@ -50,14 +50,14 @@ try {
                             LIMIT 2";
                 $offers_result = mysqli_query($conn, $offers_query);
                 $recent_offers = mysqli_fetch_all($offers_result, MYSQLI_ASSOC);
-               
+
                 foreach ($recent_offers as $offer) {
                     $id = $offer['id'];
                     $title = $offer['title'];
-                   
+
                     echo "<div class='column-1'>";
                     echo "<a class='image-link' href='offers.php'>";
-                   
+
                     // Read and display image from JSON file
                     $jsonFile = 'uploads/offers/' . $id . '.json';
                     if (file_exists($jsonFile)) {
@@ -146,7 +146,7 @@ try {
                     $avg_rating = $row["avg_rating"];
                     $price = $row["price"];
                     $final_price = $row["final_price"];
- 
+
                     echo "<div class='container-item'>";
                     // Read and display menu item image from JSON file
                     $jsonFile = 'uploads/menu/' . $food_id . '.json';
@@ -182,10 +182,7 @@ try {
                                     <input type='submit' name='add-item' value='add to cart' class='red-button'>
                                 </form>
                             </div>";
- 
-                    //                            foreach (array_keys($row) as $key) {
-                    //                                echo $key." : ".$row[$key]."<br>";
-                    //                            }
+
                     echo "</div>";
                 }
             } catch (mysqli_sql_exception $ex) {
@@ -195,5 +192,5 @@ try {
         </div>
     </main>
 </body>
- 
+
 </html>
