@@ -7,10 +7,6 @@ if (isset($_GET["delete"])) {
         $voucher_id = $_GET["voucher_id"];
         $query = "DELETE FROM voucher WHERE voucher_id = $voucher_id";
         mysqli_query($conn, $query);
-    } elseif (isset($_GET["discount_id"])) {
-        $discount_id = $_GET["discount_id"];
-        $query = "DELETE FROM discount WHERE discount_id = $discount_id";
-        mysqli_query($conn, $query);
     }
 }
 ?>
@@ -37,14 +33,9 @@ if (isset($_GET["delete"])) {
             try {
                 $query =
                     "SELECT voucher_id AS id, title, description, promo_code, percentage,
-                                start_date, expiry_date
-                            FROM voucher
-                            UNION
-                            (SELECT discount_id AS id, title, description, NULL AS promo_code, percentage,
-                                start_date, expiry_date
-                            FROM discount)
-                            ORDER BY start_date DESC
-                            ";
+                            start_date, expiry_date
+                     FROM voucher
+                     ORDER BY start_date DESC";
                 $result = mysqli_query($conn, $query);
                 $offers = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 foreach ($offers as $row) {
@@ -74,19 +65,13 @@ if (isset($_GET["delete"])) {
                     echo (is_null($promo_code)) ?  "<br>" : "<div>PROMO_CODE: $promo_code</div>";
                     echo "<div style='margin: 10px;'>$description</div>";
                     echo "<div class='float-right'>
-                                <form class='inline-div' method='get' action='staff-add-offer.php'>";
-                    if (is_null($promo_code))
-                        echo "<input type='hidden' name='discount_id' value='$id'>";
-                    else
-                        echo "<input type='hidden' name='voucher_id' value='$id'>";
-                    echo "<input type='submit' name='update' value='update' class='red-button'>
+                                <form class='inline-div' method='get' action='staff-add-offer.php'>
+                                <input type='hidden' name='voucher_id' value='$id'>
+                                <input type='submit' name='update' value='update' class='red-button'>
                                 </form>
-                                <form class='inline-div' method='get' action='staff-offers.php'>";
-                    if (is_null($promo_code))
-                        echo "<input type='hidden' name='discount_id' value='$id'>";
-                    else
-                        echo "<input type='hidden' name='voucher_id' value='$id'>";
-                    echo "<input type='submit' name='delete' value='delete' class='red-button'>
+                                <form class='inline-div' method='get' action='staff-offers.php'>
+                                <input type='hidden' name='voucher_id' value='$id'>
+                                <input type='submit' name='delete' value='delete' class='red-button'>
                                 </form>
                             </div>";
                     echo "</div>";

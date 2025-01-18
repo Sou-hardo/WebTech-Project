@@ -62,35 +62,15 @@ if (isset($_GET["delete"])) {
                                     FROM menu_item M, rating Ra
                                     WHERE M.food_id = Ra.food_id
                                     GROUP BY M.food_id
-                                ),
-                                M2 AS (
-                                    SELECT M1.food_id, M1.name, M1.price, M1.r_name, A1.avg_rating
-                                    FROM M1 LEFT JOIN A1
-                                    ON M1.food_id = A1.food_id
-                                ),
-                                D1 AS (
-                                    SELECT DI.food_id, MAX(D.percentage) AS percentage FROM discount D
-                                    JOIN discounted_items DI
-                                    ON D.discount_id = DI.discount_id
-                                    WHERE expiry_date > NOW()
-                                    GROUP BY DI.food_id
-                                ),
-                                M3 AS (
-                                    SELECT M2.food_id, M2.name, M2.r_name, 
-                                        M2.avg_rating, M2.price, D1.percentage
-                                    FROM M2 LEFT JOIN D1
-                                    ON M2.food_id = D1.food_id
                                 )
-                            SELECT food_id, name, r_name, avg_rating, price, percentage, 
-                            CASE
-                                WHEN percentage IS NULL THEN price
-                                ELSE price - price * percentage / 100
-                            END AS final_price
-                            FROM M3
-                            ";
+                            SELECT M1.food_id, M1.name, M1.r_name, 
+                                   A1.avg_rating, M1.price, M1.price as final_price
+                            FROM M1 LEFT JOIN A1
+                            ON M1.food_id = A1.food_id";
+
                 if (isset($_POST["submit"])) {
                     if ($_POST["search"] != "") {
-                        $query1 .= " WHERE name LIKE '%" . $_POST["search"] . "%'";
+                        $query1 .= " WHERE M1.name LIKE '%" . $_POST["search"] . "%'";
                     }
                     $query1 .= " ORDER BY " . $_POST["sort"];
                 }
@@ -130,10 +110,7 @@ if (isset($_GET["delete"])) {
                                 </div>";
                     }
                     echo "<div>";
-                    if ($price != $final_price) {
-                        echo "<s>$price</s>";
-                    }
-                    echo " $final_price</div>";
+                    echo "$price</div>";
                     echo "<div class='float-right'>
                                 <form class='inline-div' method='get' action='staff-add-item.php'>
                                     <input type='hidden' name='food_id' value='$food_id'>
