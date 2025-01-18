@@ -1,5 +1,4 @@
 <?php
-session_start();
 require "dbconnect.php";
 
 // Check if user is logged in and is admin
