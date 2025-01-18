@@ -46,6 +46,15 @@ function getTotalOrders($conn)
     return $row['total_orders'];
 }
 
+// Function to get total transactions
+function getTotalTransactions($conn)
+{
+    $sql = "SELECT COALESCE(SUM(total_price), 0) as total_transactions FROM orders";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    return number_format($row['total_transactions'], 2);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -75,6 +84,7 @@ function getTotalOrders($conn)
         <p>Total Customers: <?php echo getTotalCustomers($conn); ?></p>
         <p>Total Staffs: <?php echo getTotalStaffs($conn); ?></p>
         <p>Total Orders: <?php echo getTotalOrders($conn); ?></p>
+        <p>Total Transactions: Tk. <?php echo getTotalTransactions($conn); ?></p>
     </div>
 </body>
 
