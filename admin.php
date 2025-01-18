@@ -62,7 +62,7 @@ if (isset($_POST["submit"])) {
     <main>
         <div class="simple-form-div">
             <div style="padding-left: 110px;">
-                <h2>Welcome Back!</h2>
+                <h2>Admin Login</h2>
                 <form method="post" action="admin.php">
                     <label>Username:<br>
                         <input type="text" name="username" placeholder="Enter username" required>

@@ -1,5 +1,20 @@
 <?php
+session_start();
 require "dbconnect.php";
+
+// Check if user is logged in and is admin
+if (!isset($_SESSION["user_id"])) {
+    header("Location: admin.php");
+    exit();
+}
+
+$query = "SELECT admin_flag FROM users WHERE user_id = " . $_SESSION["user_id"];
+$result = mysqli_query($conn, $query);
+$row = mysqli_fetch_array($result);
+if (!$row || $row['admin_flag'] != 1) {
+    header("Location: admin.php");
+    exit();
+}
 
 // Add search functionality
 $search = isset($_GET['search']) ? $_GET['search'] : '';
