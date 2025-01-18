@@ -19,7 +19,7 @@ require "dbconnect.php";
     include "header.php";
     ?>
     <main>
-        <h2>Here's everything we got</h2>
+        <h2 style="margin-left: 20px;">What are you craving today?</h2>
         <div class="restaurant-view-h2">
             <form action="" method="post">
                 <label>Search Item

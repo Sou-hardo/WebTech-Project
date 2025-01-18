@@ -19,7 +19,7 @@ require "dbconnect.php";
     include "header.php";
     ?>
     <main>
-        <h2>All the restaurants</h2>
+        <h2 style="margin-left: 20px;">Our partnered restaurants</h2>
         <div class="restaurant-view-h2">
             <form method="get" action="">
                 <label>Search Item
