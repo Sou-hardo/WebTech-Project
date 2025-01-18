@@ -5,10 +5,7 @@ require_once "dbconnect.php";
 if (isset($_SESSION["user_id"]))
     $user_id = $_SESSION["user_id"];
 else
-    $user_id = 1;
-//    if (empty($_GET["restaurant_id"]) and empty($_GET["food_id"])) {
-//        exit();
-//    }
+    header("Location: login.php");
 ?>
 
 <!doctype html>
@@ -36,23 +33,26 @@ else
         } else {
             echo "<h2>You have to pay BDT $due_amount</h2>";
 
-            if (isset($_GET["submit"]) and $_GET["submit"] == "Make Payment") {
-                if (isset($_GET["payment_method"]) and $_GET["payment_method"] != '') {
-                    $payment_method = $_GET["payment_method"];
-                    $transaction_src = $_GET["mobile-number"];
+            if (isset($_POST["submit"]) and $_POST["submit"] == "Make Payment") {
+                if (isset($_POST["payment_method"]) and $_POST["payment_method"] != '') {
+                    $payment_method = $_POST["payment_method"];
+                    $transaction_src = $_POST["mobile-number"];
                     $query = "INSERT INTO payment(user_id, payment_method, transaction_source, amount) 
                                 VALUES ($user_id, '$payment_method', '$transaction_src', $due_amount)";
                     mysqli_query($conn, $query);
                     $query = "UPDATE users SET due_amount = 0 WHERE user_id = $user_id";
                     mysqli_query($conn, $query);
+                    
+                    // Redirect after successful payment
+                    header("Location: mobile-banking.php");
+                    exit();
                 }
             }
-
 
             echo '
                 <div class="container centered">
                     <div>
-                        <form action="mobile-banking.php">
+                        <form action="mobile-banking.php" method="POST">
                             <label>Type:
                                 <select name="payment_method">
                                     <option value="" disabled selected>Please choose an option</option>
