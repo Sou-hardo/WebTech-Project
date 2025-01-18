@@ -13,7 +13,7 @@
             
             <?php if (isset($_SESSION['user_id'])): ?>
                 <li><a href="cart.php">CART</a></li>
-                <li><a href="payment.php">PAYMENT</a></li>
+                <li><a href="online-payment.php">PAYMENT</a></li>
                 <li><a href="orders.php">ORDERS</a></li>
                 <li><a href="profile.php">PROFILE</a></li>
                 <li><a href="destroy_session.php">SIGN OUT</a></li>

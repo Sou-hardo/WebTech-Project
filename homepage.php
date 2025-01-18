@@ -40,7 +40,7 @@ try {
     include "header.php";
     ?>
     <main>
-        <h2>Offers Available Right Now</h2>
+        <h2 style="margin-left: 20px;">Offers Available Right Now</h2>
         <div class="row-1">
             <?php
             try {
@@ -77,7 +77,7 @@ try {
             }
             ?>
         </div>
-        <h2>Recently Ordered Items</h2>
+        <h2 style="margin-left: 20px;">Recently Ordered Items</h2>
         <div class="restaurant-view-h2">
             <form action="" method="post">
                 <label>Search Item

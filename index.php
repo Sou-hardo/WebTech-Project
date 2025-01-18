@@ -39,7 +39,3 @@ require "dbconnect.php";
 </body>
 
 </html>
-
-<?php
-
-?>
