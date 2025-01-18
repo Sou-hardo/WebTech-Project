@@ -4,12 +4,8 @@ require_once "dbconnect.php";
 
 if (isset($_SESSION["user_id"])) {
     $user_id = $_SESSION["user_id"];
-}
-// else
-//     $user_id = 1;
-//    if (empty($_GET["restaurant_id"]) and empty($_GET["food_id"])) {
-//        exit();
-//    }
+} else
+    header("Location: sign-in.php");
 try {
     $today = date('Y-m-d');
 
@@ -156,7 +152,7 @@ try {
             <h2>Your order has been confirmed.</h2>
             <h2>Proceed to payment?</h2>
             <div class="simple-flexbox">
-                <form action="online-payment.php">
+                <form action="mobile-banking.php">
                     <input class="red-button medium-sized-button" type="submit" name="submit" value="Yes">
                 </form>
                 <form action="homepage.php">
