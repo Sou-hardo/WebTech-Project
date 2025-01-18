@@ -43,18 +43,25 @@ function getTotalOrders($conn)
     <title>Admin Homepage</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
+
+    <style>
+        .text-align {
+            margin-left: 20px;
+        }
+    </style>
 </head>
 
 <body>
-<?php
+    <?php
     include "admin-header.php";
     include "footer.php";
     ?>
-
-    <h2>Statistics</h2>
-    <p>Total Customers: <?php echo getTotalCustomers($conn); ?></p>
-    <p>Total Staffs: <?php echo getTotalStaffs($conn); ?></p>
-    <p>Total Orders: <?php echo getTotalOrders($conn); ?></p>
+    <div class="text-align">
+        <h2>Statistics</h2>
+        <p>Total Customers: <?php echo getTotalCustomers($conn); ?></p>
+        <p>Total Staffs: <?php echo getTotalStaffs($conn); ?></p>
+        <p>Total Orders: <?php echo getTotalOrders($conn); ?></p>
+    </div>
 </body>
 
 </html>
