@@ -52,7 +52,7 @@ else
             echo '
                 <div class="container centered">
                     <div>
-                        <form action="mobile-banking.php" method="POST">
+                        <form action="mobile-banking.php" method="POST" onsubmit="return validateForm()">
                             <label>Type:
                                 <select name="payment_method">
                                     <option value="" disabled selected>Please choose an option</option>
@@ -62,11 +62,13 @@ else
                                 </select>
                             </label><br><br>
                             <label>Mobile Number:<br>
-                                <input type="text" name="mobile-number" placeholder="Enter Mobile Number" required>
-                            </label><br>
+                                <input type="text" name="mobile-number" id="mobile-number" placeholder="Enter Mobile Number" required>
+                            </label>
+                            <span id="mobile-error" style="color: red; display: none;"></span><br>
                             <label>PIN:<br>
-                                <input type="password" name="pin" placeholder="Enter PIN" required>
-                            </label><br>
+                                <input type="password" name="pin" id="pin" placeholder="Enter PIN" required>
+                            </label>
+                            <span id="pin-error" style="color: red; display: none;"></span><br>
                             <input class="red-button" type="submit" name="submit" value="Make Payment">
                         </form>
                     </div>
@@ -74,6 +76,7 @@ else
         }
         ?>
     </main>
-</body>
 
+    <script src="js/payment-validation.js"></script>
+</body>
 </html>
