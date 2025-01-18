@@ -29,7 +29,7 @@ try {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
     <style>
         .offer-image {
-            max-width: 100px;
+            max-width: 300px;
             max-height: 200px;
         }
     </style>
