@@ -27,7 +27,7 @@ $restaurant_id = $_GET["restaurant_id"];
     <?php
     include "header.php";
     ?>
-    <div class="container restaurant-view">
+    <!-- <div class="container restaurant-view">
         <?php
         $query1 =
             "SELECT R.name, Ar.name AS area, Ar.city, Ar.district
@@ -66,7 +66,7 @@ $restaurant_id = $_GET["restaurant_id"];
             exit("Error: " . $ex->getMessage());
         }
         ?>
-    </div>
+    </div> -->
     <h2>Items in <?php echo $r_name ?></h2>
     <div class="restaurant-view-h2">
         <form action="restaurant-view-items.php" method="get">
