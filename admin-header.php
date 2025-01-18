@@ -5,7 +5,7 @@
             <h1><a href="admin-homepage.php">Chewtopia</a></h1>
         </div>
         <ul>
-            <li><a href="admin-homepage.php">STATS</a></li>
+            <li><a href="admin-manage-users.php">USERS</a></li>
             <li><a href="admin-adress.php">LOCATIONS</a></li>
             <li><a href="add-admin.php">ADMINS</a></li>
             <?php if (isset($_SESSION['user_id'])): ?>
