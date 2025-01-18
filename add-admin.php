@@ -1,8 +1,17 @@
 <?php
 require "dbconnect.php";
 
-// Fetch all admins
-$admins = mysqli_query($conn, "SELECT * FROM users WHERE admin_flag = 1");
+// Add search functionality
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+if (isset($search) && !empty($search)) {
+    $query = "SELECT * FROM users WHERE (name LIKE '%$search%' OR username LIKE '%$search%' OR email LIKE '%$search%') AND admin_flag = 1 ORDER BY user_id DESC LIMIT 12";
+} else {
+    $query = "SELECT * FROM users WHERE admin_flag = 1 ORDER BY user_id DESC LIMIT 12";
+}
+$admins = mysqli_query($conn, $query);
+
+// Get total count for displaying info
+$total_count = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count FROM users WHERE admin_flag = 1"))['count'];
 
 // Add or remove admin
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -139,6 +148,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="main-container">
         <div class="table-container">
             <h3>All Admins</h3>
+            <!-- Add search form -->
+            <form method="GET" class="search-form" style="margin-bottom: 20px;">
+                <div class="form-group" style="justify-content: flex-start; gap: 10px;">
+                    <input type="text" name="search" placeholder="Search by name, username or email" 
+                           value="<?php echo htmlspecialchars($search); ?>" style="width: 650px;">
+                    <button type="submit">Search</button>
+                    <?php if($search): ?>
+                        <a href="add-admin.php" class="button" style="padding: 5px 10px; text-decoration: none; background: #666;">Clear</a>
+                    <?php endif; ?>
+                </div>
+            </form>
+            
+            <p style="margin-bottom: 10px; color: #666;">
+                Showing <?php echo mysqli_num_rows($admins); ?> most recent admins 
+                (Total admins: <?php echo $total_count; ?>)
+            </p>
+            
             <table cellpadding="10" cellspacing="0">
                 <tr>
                     <th>User ID</th>
