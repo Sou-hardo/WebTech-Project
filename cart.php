@@ -90,9 +90,9 @@ if (isset($_GET["update"])) {
     include "header.php";
     ?>
     <main>
-        <a href="menu-items-all.php" class="inline-link"><- Continue Shopping</a><br>
-                <h2>Shopping cart</h2>
-                <p>
+        
+                <h2 style="margin-left: 20px;">Shopping cart</h2>
+                <p style="margin-left: 20px;">
                     You have
                     <?php
                     try {
@@ -104,6 +104,7 @@ if (isset($_GET["update"])) {
                     }
                     ?>
                     item(s) in your cart<br>
+                    <a href="menu-items-all.php" class="inline-link"><- Continue Shopping</a><br>
                 </p>
                 <div class="vertical-container">
                     <?php
