@@ -2,6 +2,13 @@
 global $conn;
 require "dbconnect.php";
 
+// Check if user is logged in and is staff
+if (!isset($_SESSION["user_id"])) {
+    header("Location: customer-or-staff.php");
+    exit();
+}
+//  else header("Location: admin.php");
+
 // Set offer as default tab
 $activeTab = 'offer';
 if (isset($_GET['tab'])) {

@@ -85,6 +85,10 @@ if (isset($_POST["submit"])) {
         input[type="text"], input[type="number"], input[type="date"], input[type="time"], input[type="file"], textarea {
             width: 350px;
         }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 
@@ -96,7 +100,7 @@ if (isset($_POST["submit"])) {
         <div class="container centered">
             <div>
             <h2><?php echo $isUpdate ? 'Update Item' : 'Add New Item'; ?></h2>
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                 <?php if ($isUpdate): ?>
                     <input type="hidden" name="food_id" value="<?php echo $existingData['food_id']; ?>">
                 <?php endif; ?>
@@ -104,11 +108,13 @@ if (isset($_POST["submit"])) {
                 <label>Name:<br>
                     <input type="text" name="name" required 
                            value="<?php echo $isUpdate ? $existingData['name'] : ''; ?>">
-                </label><br>
+                </label>
+                <div id="nameError" class="error"></div><br>
                 <label>Category:<br>
                     <input type="text" name="category" 
                            value="<?php echo $isUpdate ? $existingData['category'] : ''; ?>">
-                </label><br>
+                </label>
+                <div id="categoryError" class="error"></div><br>
                 <label>Price:<br>
                     <input type="number" name="price" required 
                            value="<?php echo $isUpdate ? $existingData['price'] : ''; ?>">
@@ -156,6 +162,7 @@ if (isset($_POST["submit"])) {
         </div>
     </main>
 
+    <script src="js/add-item-validation.js"></script>
     <script src="js/preview.js"></script>
 </body>
 

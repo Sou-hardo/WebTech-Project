@@ -116,7 +116,7 @@ if (isset($_POST["submit"])) {
         <div class="container centered">
             <div>
                 <h2><?php echo $isUpdate ? 'Update Restaurant' : 'Add New Restaurant'; ?></h2>
-                <form method="post" action="staff-add-restaurant.php" enctype="multipart/form-data">
+                <form method="post" action="staff-add-restaurant.php" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <?php if ($isUpdate): ?>
                         <input type="hidden" name="restaurant_id" value="<?php echo $existingData['restaurant_id']; ?>">
                         <input type="hidden" name="address_id" value="<?php echo $existingData['address_id']; ?>">
@@ -124,12 +124,15 @@ if (isset($_POST["submit"])) {
 
                     <label>Name<br>
                         <input type="text" name="name" required
-                            value="<?php echo $isUpdate ? $existingData['name'] : ''; ?>"><br>
+                            value="<?php echo $isUpdate ? $existingData['name'] : ''; ?>">
                     </label>
+                    <div id="nameError" class="error"></div><br>
+                    
                     <label>Phone<br>
                         <input type="text" name="phone" required
-                            value="<?php echo $isUpdate ? $existingData['phone_no'] : ''; ?>"><br>
+                            value="<?php echo $isUpdate ? $existingData['phone_no'] : ''; ?>">
                     </label>
+                    <div id="phoneError" class="error"></div><br>
                     <h3>Address</h3>
                     <label>Flat<br>
                         <input type="text" name="flat" required
@@ -144,9 +147,10 @@ if (isset($_POST["submit"])) {
                             value="<?php echo $isUpdate ? $existingData['road_no'] : ''; ?>"><br>
                     </label>
                     <label>Zip Code<br>
-                        <input type="text" name="zip-code" required minlength="4" maxlength="4"
+                        <input type="text" name="zip-code" required
                             value="<?php echo $isUpdate ? $existingData['zip_code'] : ''; ?>"><br>
                     </label>
+                    <div id="zipError" class="error"></div><br>
                     <h3>Area</h3>
                     <label>
                         <?php
@@ -198,6 +202,7 @@ if (isset($_POST["submit"])) {
         </div>
     </main>
 
+    <script src="js/add-restaurant-validation.js"></script>
     <script src="js/preview.js"></script>
 </body>
 
