@@ -85,6 +85,10 @@ if (isset($_POST["submit"])) {
         input[type="text"], input[type="number"], input[type="date"], input[type="time"], input[type="file"], textarea {
             width: 350px;
         }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 
@@ -96,7 +100,7 @@ if (isset($_POST["submit"])) {
         <div class="container centered">
             <div>
                 <h2><?php echo $isUpdate ? 'Update Voucher' : 'Add New Voucher'; ?></h2>
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <?php if ($isUpdate): ?>
                         <input type="hidden" name="voucher_id" value="<?php echo $existingData['voucher_id']; ?>">
                     <?php endif; ?>
@@ -113,19 +117,22 @@ if (isset($_POST["submit"])) {
                     <label>Promo Code:<br>
                         <input type="text" name="promo_code" required maxlength="20"
                             value="<?php echo $isUpdate ? $existingData['promo_code'] : ''; ?>">
-                    </label><br>
+                    </label>
+                    <div id="promoCodeError" class="error"></div><br>
                     <label>Discount Percentage:<br>
-                        <input type="number" name="percentage" required min="0" max="100" step="0.01"
+                        <input type="number" name="percentage" required min="0" max="100" step="0.1"
                             value="<?php echo $isUpdate ? $existingData['percentage'] : ''; ?>">
                     </label><br>
                     <label>Start Date:<br>
                         <input type="date" name="start_date" required
                             value="<?php echo $isUpdate ? $existingData['start_date'] : ''; ?>">
-                    </label><br>
+                    </label>
+                    <div id="startDateError" class="error"></div><br>
                     <label>Expiry Date:<br>
                         <input type="date" name="expiry_date" required
                             value="<?php echo $isUpdate ? $existingData['expiry_date'] : ''; ?>">
-                    </label><br><br>
+                    </label>
+                    <div id="expiryDateError" class="error"></div><br><br>
                     
                     <?php if ($isUpdate): ?>
                         <div>Current image:</div>
@@ -173,6 +180,7 @@ if (isset($_POST["submit"])) {
         </div>
     </main>
 
+    <script src="js/add-offer-validation.js"></script>
     <script src="js/preview.js"></script>
 </body>
 
