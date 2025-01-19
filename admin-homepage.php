@@ -5,7 +5,7 @@ require "dbconnect.php";
 if (!isset($_SESSION["user_id"])) {
     header("Location: admin.php");
     exit();
-}
+} else header("Location: admin.php");
 
 $query = "SELECT admin_flag FROM users WHERE user_id = " . $_SESSION["user_id"];
 $result = mysqli_query($conn, $query);
