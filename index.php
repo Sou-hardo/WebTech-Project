@@ -26,6 +26,7 @@ require "dbconnect.php";
                 <a class="red-button" href="sign-up.php">Sign up</a>
                 <a class="red-button" href="customer-or-staff.php">Sign in</a><br>
                 <br><a style="font-size: 10px;" href="admin.php">Admin Login</a>
+                <br><a style="font-size: 10px;" href="driver.php">Be part of our amazing service!</a>
             </div>
 
             <div>
