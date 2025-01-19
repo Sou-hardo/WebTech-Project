@@ -29,14 +29,13 @@ if (isset($_POST["submit"])) {
                       WHERE username = '$username'
                       AND user_password = '$password'
                       AND customer_flag = $customer_flag";
-        echo $query;
         $result = mysqli_query($conn, $query);
     } catch (mysqli_sql_exception $ex) {
         exit("Error: " . $ex->getMessage());
     }
     if (empty($row = mysqli_fetch_assoc($result))) {
         unset($_POST);
-        echo "Incorrect username or password!<br>";
+        echo "<script>var loginError = true;</script>";
     } else {
         $_SESSION["user_id"] = $row["user_id"];
         if ($customer_flag == 1)
@@ -57,6 +56,12 @@ if (isset($_POST["submit"])) {
     <title>Sign in</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
+    <style>
+        .error-message {
+            color: red;
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -67,6 +72,7 @@ if (isset($_POST["submit"])) {
         <div class="simple-form-div">
             <div style="padding-left: 110px;">
                 <h2>Welcome Back!</h2>
+                
                 <form method="post" action="sign-in.php">
                     <?php
                     if ($customer_flag == 1)
@@ -80,13 +86,20 @@ if (isset($_POST["submit"])) {
                     <label>Password:<br>
                         <input type="password" name="password" placeholder="Enter password" required>
                     </label><br>
+
+                    <div id="errorMessage" class="error-message">
+                    Incorrect Credentials!
+                    </div>
+
                     <input type="submit" class="red-button" name="submit" value="Submit"><br>
                 </form>
+                
                 <br>Don't have an account? <a href="sign-up.php" class="inline-link"><br>Sign up</a>
             </div>
         </div>
         </div>
     </main>
+    <script src="js/sign-in-fail.js"></script>
 </body>
 
 </html>

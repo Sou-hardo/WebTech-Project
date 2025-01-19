@@ -26,11 +26,12 @@ if (isset($_POST["submit"])) {
                       AND admin_flag = '$admin_flag'";
         $result = mysqli_query($conn, $query);
     } catch (mysqli_sql_exception $ex) {
-        exit("Error: " . $ex->getMessage());
+        echo "<script>var loginError = true;</script>";
+        $result = false;
     }
-    if (empty($row = mysqli_fetch_assoc($result))) {
+    if (!$result || empty($row = mysqli_fetch_assoc($result))) {
         unset($_POST);
-        echo "Incorrect username or password!<br>";
+        echo "<script>var loginError = true;</script>";
     } else {
         $_SESSION["user_id"] = $row["user_id"];
         if ($row['admin_flag'] == 1) {
@@ -51,7 +52,11 @@ if (isset($_POST["submit"])) {
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira%20Code">
     <style>
-
+        .error-message {
+            color: red;
+            display: none;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
@@ -70,12 +75,16 @@ if (isset($_POST["submit"])) {
                     <label>Password:<br>
                         <input type="password" name="password" placeholder="Enter password" required>
                     </label><br>
+                    <div id="errorMessage" class="error-message">
+                        Incorrect Credentials!
+                    </div>
                     <input type="submit" class="red-button" name="submit" value="Submit"><br>
                 </form>
             </div>
         </div>
         </div>
     </main>
+    <script src="js/sign-in-fail.js"></script>
 </body>
 
 </html>

@@ -101,20 +101,12 @@ if (isset($_SESSION['user_id'])) {
                             $city = $row["city"];
                             $district = $row["district"];
                             echo "<option value=$area_id>$a_name, $city, $district</option>";
-
-
-                            //                            echo "<input type='radio' name='area' value="
-                            //                                .$row["area_id"]."> ";
-                            //                            echo ucfirst($row["name"]).
-                            //                                 " (City: ".ucfirst($row["city"]).
-                            //                                 ", District: ".ucfirst($row["district"]).") <br>";
                         }
                         echo "</select>" . "<br>";
                         ?>
                     </label>
                     <input class="red-button" type="submit" name="submit" value="Update"><br>
                 </form>
-                <!--                    Already have an account? <a href="" class="inline-link">Sign in</a>-->
 
             </div>
         </div>
@@ -148,9 +140,7 @@ if (isset($_POST["submit"]) and $_POST["submit"] == "Update") {
                  user_password = '$password'
                  WHERE user_id = $current_id;
                  ";
-        //            $query1 = "INSERT INTO address(flat_no, house_no,
-        //                        road_no, zip_code, area_id) VALUES
-        //                        ('$flat', $house, '$road', '$zip_code', $area_id)";
+
         mysqli_query($conn, $query1);
         if (isset($_POST["area_id"]) and $_POST["area_id"] != '') {
             $query2 = "UPDATE address SET 
@@ -164,12 +154,7 @@ if (isset($_POST["submit"]) and $_POST["submit"] == "Update") {
             $result = mysqli_query($conn, $query2);
             mysqli_fetch_array($result);
         }
-        //            $address_id = $row[0];
-        //            $query3 = "INSERT INTO users (name, phone, email, date_of_birth, customer_flag,
-        //                       nid_no, username, user_password, address_id) VALUES
-        //                       ('$name', '$phone', '$email', '$date_of_birth', 1, NULL,
-        //                        '$username', '$password', $address_id)";
-        //            $result = mysqli_query($conn, $query3);
+
     } catch (mysqli_sql_exception $ex) {
         echo "Error: " . $ex->getMessage();
     }

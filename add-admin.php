@@ -201,14 +201,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="form-container">
             <div class="input-border">
                 <h3>Add Admin</h3>
-                <form method="post" class="form-style">
+                <form method="post" class="form-style" id="addAdminForm">
                     <div class="form-group">
                         <label for="username_add">Username:</label>
                         <input type="text" id="username_add" name="username" placeholder="Username" required>
                     </div>
                     <div class="form-group">
                         <label for="password_add">Password:</label>
-                        <input type="password" id="password_add" name="password" placeholder="Password" required>
+                        <input type="password" id="password_add" name="password" placeholder="Password" required minlength="6">
                     </div>
                     <div class="form-group">
                         <label for="name_add">Name:</label>
@@ -223,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="input-border">
                 <h3>Remove Admin</h3>
-                <form method="post" class="form-style">
+                <form method="post" class="form-style" id="removeAdminForm">
                     <div class="form-group">
                         <label for="username_remove">Username:</label>
                         <input type="text" id="username_remove" name="username" placeholder="Username" required>
@@ -233,6 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
     </div>
+    <script src="js/add-admin-validation.js"></script>
 </body>
 
 </html>
